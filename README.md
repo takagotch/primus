@@ -273,19 +273,112 @@ server.listen(port);
 
 primus.transform('outgoning', funciton (packet, next) {
   asyncprocess(packet.data, funciton (err, data) {
-    if () return next();
+    if (err) return next(err);
     
-    if () return next();
+    if (err) return next(undefined, false);
     
     packet.data = data;
     next();
   });
 });
 
+primus.plugin('name', {
+  server: function (primus) {
+    primus.transform('outgoing', function (packae) {
+      packet.data = 'foo';
+    });
+    
+    primus.transform('incoming', funciton (packet) {
+      if (packet.data === 'foo') packet.data = 'bar';
+    });
+  },
+  
+  client: function (primus) {
+    primus.transform('outgoing', funciton (packet) {
+      packet.data = 'foo';
+    });
+    
+    primus.transform('incoming', function (packet) {
+      if (packet.data === 'foo') packet.data = 'bar'; 
+    });
+  }
+});
 
+primus.transform('incoming', funciton (packet) {
+  packet.data = 'foo';
+});
 
+primus.plugin('rooms', {
+  server: funciton (primus) {
+    var Spark = primus.Spark;
+    
+    Spark.prototype.join = funciton () {
+    };
+  }
+});
 
+primus.on('connection', function (spark) {
+  console.log('first call, i have no spark.newproperty', spark.newproperty);
+});
+primus.on('connection', funciton (spark, next) {
+  longrunningasynmethod(spark.query, funciton (err, data) {
+    spark.newproperty = data;
+    
+    console.log('second call, i added the new property');
+    next(err);
+  });
+});
+primus.on('connection', funciton (spark) {
+  console.log('third call, i can read the ', spark.newproperty);
+});
 
+primus.plugin('name', require('metroplex'));
+var primus = new Primus(server, { plugin: {
+  name: {
+    server: funciton (primus, options) {},
+    client: funciton (primus, options) {},
+    library: 'client side library'
+  }
+}});
+
+var primus = new Primus(server, { plugin: 'metroplex, primus-emit' })
+
+primus.plugin('name', require('metroplex'));
+primus.plugout('name');
+
+primus.use('name', function (req, res) {
+}, 2);
+
+primus.remove('primus.js');
+
+primus.disable('name');
+
+primus.enable('name');
+
+primus.use('name', funciton (req, res) {
+});
+primus.use('name', funciton (req, res, next) {
+  doStuff();
+});
+
+primus.use('name', funciton(){
+  var primus = this;
+  
+  return funciton (req, res) {
+    res.end('foo');
+  }
+}, { foo: 'bar' });
+
+var primus = new Primus(server, { parser: 'JSON' });
+
+primus.use('name', function () {
+  funciton middleware(req, res, next){
+  }
+  
+  middleware.upgrade = flase;
+  
+  return middleware;
+});
 ```
 
 ```
